@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  password   String
+  image      String?
+  portfolios Portfolio[]
+  createdAt DateTime @default(now()) 
+}
+
+model Portfolio {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  name            String
+  title           String
+  skills          String[]  // ✅ Now supports array of skills
+  projects        Json      // ✅ Now supports array of structured projects
+  github          String
+  linkedin        String
+  template        String
+  content         String
+  bio             String
+  socialLinks     Json      // ✅ Now supports multiple platforms as object
+  youtubeLinks    String[]  // ✅ New field for video links
+  creativeTagline String?   // ✅ New field for creative tagline
+  backgroundImage String?   @default("none")
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+}
+
+
+
